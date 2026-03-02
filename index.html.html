@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>С 8 Марта, любимая!</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #f5f0ff, #fadadd); /* Нежный градиент */
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        .card {
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 30px;
+            border-radius: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 90%;
+            width: 500px;
+            backdrop-filter: blur(5px);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+        }
+        h1 {
+            color: #d44e6c; /* Нежно-розовый */
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.05);
+        }
+        p {
+            color: #555;
+            font-size: 1.4em;
+            line-height: 1.6;
+            margin: 20px 0;
+        }
+        .flower {
+            font-size: 5em;
+            margin: 20px 0;
+            animation: swing 2s ease-in-out infinite;
+        }
+        @keyframes swing {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+        button {
+            background-color: #d44e6c;
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            font-size: 1.3em;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(212, 78, 108, 0.4);
+            transition: transform 0.2s;
+            border: 1px solid white;
+        }
+        button:hover {
+            transform: scale(1.05);
+            background-color: #c13d5b;
+        }
+        /* Стиль для кнопки, которую добавит Telegram (опционально) */
+        .tg-primary-button {
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="flower">🌷🌸🌼</div>
+        <h1>С 8 Марта, Дашуль!</h1>
+        <p>
+            Ты самый прекрасный и нежный человек в моей жизни. <br>
+            Пусть этот день будет наполнен весенним теплом, радостью и цветами!
+        </p>
+        <p>
+            <em>Я тебя очень люблю!</em> ❤️
+        </p>
+        <!-- Это кнопка Telegram, которая появится автоматически. Мы просто оставим место. -->
+        <div id="telegram-button-placeholder" style="height: 30px;"></div>
+        <!-- А это твоя дополнительная кнопка для сюрприза -->
+        <button onclick="showSurprise()">Нажми на меня!</button>
+    </div>
+
+    <script>
+        // Функция для сюрприза при нажатии на кнопку
+        function showSurprise() {
+            alert("Ты самая лучшая! 🌷");
+            // Здесь можно добавить что угодно: смена картинки, музыка, конфетти из emoji :)
+        }
+
+        // Подключаем скрипт Telegram (объясню ниже)
+        // Этот скрипт автоматически добавит кнопку "Закрыть" и настроит цвета
+        // window.Telegram.WebApp будет доступен после загрузки скрипта
+        function onTelegramAuth() {
+            if (window.Telegram && window.Telegram.WebApp) {
+                // Сообщаем Telegram, что приложение готово
+                window.Telegram.WebApp.ready();
+                // Можно даже изменить цвет кнопки
+                // window.Telegram.WebApp.MainButton.setParams({"color": "#d44e6c"}).show();
+            }
+        }
+    </script>
+    <!-- Подключаем официальный SDK Telegram -->
+    <script src="https://telegram.org/js/telegram-web-app.js" onload="onTelegramAuth()"></script>
+</body>
+</html>
