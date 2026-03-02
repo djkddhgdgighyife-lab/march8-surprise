@@ -414,10 +414,12 @@
             <div id="youtubePlayer" class="youtube-player">
                 <iframe 
                     id="youtubeIframe"
+                    width="100%" 
+                    height="315" 
                     src="https://www.youtube.com/embed/_FtS8L_hzk0?enablejsapi=1&rel=0&modestbranding=1"
-                    title="YouTube video player"
-                    frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    title="YouTube video player" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
                     allowfullscreen>
                 </iframe>
             </div>
@@ -473,6 +475,9 @@
         </div>
     </div>
 
+    <!-- Подключаем YouTube API -->
+    <script src="https://www.youtube.com/iframe_api"></script>
+    
     <script>
         // Массив с романтичными цитатами
         const quotes = [
@@ -501,23 +506,50 @@
         const playBtn = document.getElementById('playMusicBtn');
         const nowPlayingDiv = document.getElementById('nowPlaying');
         const youtubePlayer = document.getElementById('youtubePlayer');
-        let player;
+        let ytPlayer = null;
+        let playerReady = false;
+        
+        // Функция, вызываемая YouTube API когда плеер готов
+        function onYouTubeIframeAPIReady() {
+            ytPlayer = new YT.Player('youtubeIframe', {
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+        
+        function onPlayerReady(event) {
+            playerReady = true;
+            console.log('YouTube плеер готов');
+        }
+        
+        function onPlayerStateChange(event) {
+            // Если видео закончилось (state = 0)
+            if (event.data === 0) {
+                // Можно перезапустить или просто ничего не делать
+                console.log('Видео закончилось');
+            }
+        }
         
         // Функция для включения/выключения музыки
         function toggleMusic() {
+            if (!playerReady) {
+                alert('Плеер еще не загрузился, попробуй через секунду');
+                return;
+            }
+            
             if (isMusicPlaying) {
                 // Останавливаем видео
-                document.getElementById('youtubeIframe').src = document.getElementById('youtubeIframe').src;
+                ytPlayer.pauseVideo();
                 youtubePlayer.style.display = 'none';
                 playBtn.textContent = '🎶 Включить';
                 playBtn.classList.remove('playing');
                 nowPlayingDiv.style.display = 'none';
             } else {
-                // Показываем и запускаем видео
+                // Показываем плеер и запускаем видео
                 youtubePlayer.style.display = 'block';
-                // Добавляем autoplay=1 к ссылке для автоматического воспроизведения
-                const iframe = document.getElementById('youtubeIframe');
-                iframe.src = "https://www.youtube.com/embed/_FtS8L_hzk0?autoplay=1&rel=0&modestbranding=1";
+                ytPlayer.playVideo();
                 
                 playBtn.textContent = '⏸️ Выключить';
                 playBtn.classList.add('playing');
@@ -677,7 +709,7 @@
             }, 1000);
             
             // Если музыка еще не играет, предлагаем включить
-            if (!isMusicPlaying) {
+            if (!isMusicPlaying && playerReady) {
                 setTimeout(() => {
                     if (confirm("Включить песню HOLLYFLAME - Тону?")) {
                         toggleMusic();
